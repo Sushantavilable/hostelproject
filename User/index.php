@@ -1,23 +1,4 @@
-<?php
 
-// Check if user is logged in
-if (!isset($_SESSION['UserID'])) {
-}
-
-// Include database connection
-require_once('../includes/db_connection.php');
-// Query to fetch hostels with their primary images
-$query = "SELECT h.HostelID, h.Name, h.Description, h.ContactNumber,h.Address,h.City, 
-            COALESCE(hi.ImagePath, 'images/hostels/default-hostel.jpg') as ImagePath 
-            FROM hostels h 
-            LEFT JOIN hostel_images hi ON h.HostelID = hi.HostelID 
-            WHERE hi.IsPrimaryImage = 1 OR hi.ImagePath IS NULL
-            LIMIT 3";
-$result = mysqli_query($conn, $query);
-
-// Check if there are any hostels
-if (mysqli_num_rows($result) > 0):
-?>
 
     <!DOCTYPE html>
     <html>
@@ -109,11 +90,8 @@ if (mysqli_num_rows($result) > 0):
 
     </html>
 
-<?php
-else:
-    // Display a message if no hostels are found
-?>
-    <section class="rooms">
+
+ <section class="rooms">
         <div class="container top">
             <div class="heading">
                 <h2>No Hostels Available</h2>
@@ -121,9 +99,3 @@ else:
             </div>
         </div>
     </section>
-<?php
-endif;
-
-// Close the database connection
-mysqli_close($conn);
-?>
