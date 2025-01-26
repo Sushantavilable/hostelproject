@@ -1,0 +1,416 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+h1,
+h2 {
+  font-family: sans-serif;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex_space {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  border: none;
+  background: none;
+  outline: none;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.primary-btn {
+  padding: 15px 40px;
+  background: #7fc142;
+  font-weight: bold;
+  color: white;
+}
+
+.container {
+  max-width: 85%;
+  margin: auto;
+}
+
+/*--------header---------*/
+header {
+  height: 10vh;
+  line-height: 10vh;
+  padding: 0 20px;
+}
+
+header img {
+  margin: 20px 0;
+}
+
+header ul {
+  display: inline-block;
+}
+
+header ul li {
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+header ul li a {
+  color: #1a1919;
+  margin: 0 10px;
+  transition: 0.5s;
+}
+
+header ul li a:hover {
+  color: #7fc142;
+}
+
+header i {
+  margin: 0 20px;
+}
+
+header button {
+  padding: 13px 40px;
+  background: none; /* Or specify a background color */
+  color: white; /* Default text color */
+  border: 1px solid #7fc142; /* Optional: Add border for better styling */
+  transition: color 0.3s, background 0.3s; /* Smooth transition for color and background */
+}
+header button:hover {
+  color: black; /* Text color on hover */
+  background-color: white; /* Optional: Add a background color on hover */
+}
+
+/* Ensure the link inside the button doesn't override the styles */
+header button a {
+  color: inherit; /* Inherit color from the button */
+  text-decoration: none; /* Remove underline */
+}
+
+header .navlinks span {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  header ul {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #009f7f;
+    overflow: hidden;
+    transition: max-height 0.5s;
+    text-align: center;
+    z-index: 9;
+  }
+
+  header ul li {
+    display: block;
+  }
+
+  header ul li a {
+    color: white;
+  }
+
+  header i {
+    color: white;
+  }
+
+  header .navlinks span {
+    color: black;
+    display: block;
+    cursor: pointer;
+    line-height: 10vh;
+    font-size: 25px;
+  }
+}
+
+/*--------home---------*/
+.home {
+  height: 100vh;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #fff;
+}
+
+.home img {
+  width: 100%;
+  height: 100vh;
+}
+
+.home .text {
+  position: absolute;
+  top: 35%;
+  left: 5%;
+}
+
+.home .text h1 {
+  font-size: 80px;
+  font-family: serif;
+  font-weight: 400;
+}
+
+.home p {
+  margin: 20px 0;
+}
+
+.home button {
+  margin-right: 20px;
+}
+
+/* headings */
+.heading {
+  text-align: center;
+  margin: 40px 0;
+  position: relative;
+}
+
+.heading h1 {
+  font-family: "Raleway", sans-serif;
+  font-size: 100px;
+  color: rgba(229, 229, 229, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+
+.heading h2 {
+  font-size: 50px;
+  color: #333;
+  font-weight: 400;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  z-index: 2;
+}
+
+.heading p {
+  color: #666;
+  font-size: 16px;
+  margin-top: 25px;
+}
+/* about */
+.about {
+  padding: 20px 0;
+  background: #fff;
+}
+
+.about .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.about .flex {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.about .left {
+  flex: 1;
+}
+
+.about .right {
+  flex: 1;
+}
+
+.about .right img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.about p {
+  color: #666;
+  line-height: 1.8;
+  margin: 30px 0;
+}
+
+.about-btn {
+  background: #2c3e50;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.about-btn:hover {
+  background: #34495e;
+}
+
+@media (max-width: 768px) {
+  .about .flex {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .about {
+    padding: 40px 0;
+  }
+}
+
+/*--------rooms---------*/
+.rooms {
+  position: relative;
+}
+
+.rooms .rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.rooms .items {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.rooms .image img {
+  width: 100%;
+  height: auto;
+}
+
+.rooms .text {
+  border-top: none;
+  padding: 20px;
+}
+
+.rooms i {
+  font-size: 15px;
+  color: #fbb234;
+  margin: 15px 0;
+  margin-right: 5px;
+}
+
+.rooms p {
+  margin: 10px 0;
+  opacity: 0.7;
+}
+
+.rooms h3 {
+  font-size: 30px;
+  line-height: 20px;
+  margin-left: 20px;
+  font-weight: 500;
+  color: #7fc142;
+}
+
+.rooms h3 span {
+  font-size: 15px;
+  font-weight: 400;
+  color: #000;
+}
+.items .image {
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.items .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+.more-button {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.more-button .primary-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 16px;
+  background: #2c3e50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.more-button .primary-btn:hover {
+  background: #34495e;
+}
+
+/*--------responsive---------*/
+@media only screen and (max-width: 768px) {
+  .rooms .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*--------footer---------*/
+footer {
+  background: #282834;
+  color: #b6b7b9;
+  padding: 15px 0 5px 0;
+}
+
+footer .grid {
+  grid-template-columns: 6fr 3fr 3fr;
+}
+
+footer p {
+  color: #b6b7b9;
+  font-size: 15px;
+  line-height: 10px;
+}
+
+footer .icon i {
+  margin: 20px 20px 20px 0;
+  color: #ffffff;
+}
+
+footer h2 {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+footer li {
+  margin-bottom: 20px;
+}
+
+footer i {
+  color: #f5f7f3;
+  margin: 20px 0;
+  margin-right: 20px;
+}
+
+footer label {
+  margin: 20px 0;
+}
+
+.legal {
+  padding: 15px 0;
+  background: #282834;
+  color: #fdfeff;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
