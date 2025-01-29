@@ -148,74 +148,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             ?>
 
-            <form action="" method="POST" class="horizontal-form">
+            <form method="POST" action="" class="horizontal-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="room_number">Room Number <span class="required">*</span></label>
-                        <input type="text" id="room_number" name="room_number" required
-                            value="<?php echo isset($_POST['room_number']) ? htmlspecialchars($_POST['room_number']) : ''; ?>">
+                        <label for="room_number">Room Number</label>
+                        <input type="text" class="form-control" id="room_number" name="room_number" 
+                            value="<?php echo isset($_POST['room_number']) ? htmlspecialchars($_POST['room_number']) : ''; ?>" required>
                     </div>
+
                     <div class="form-group">
                         <label for="floor">Floor</label>
-                        <input type="number" id="floor" name="floor" min="1"
-                            value="<?php echo isset($_POST['floor']) ? htmlspecialchars($_POST['floor']) : '1'; ?>">
+                        <input type="number" class="form-control" id="floor" name="floor" 
+                            value="<?php echo isset($_POST['floor']) ? htmlspecialchars($_POST['floor']) : '1'; ?>" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="price_per_month">Price Per Month <span class="required">*</span></label>
-                        <input type="number" step="0.01" id="price_per_month" name="price_per_month" required
-                            value="<?php echo isset($_POST['price_per_month']) ? htmlspecialchars($_POST['price_per_month']) : ''; ?>">
+                        <label for="room_type">Room Type</label>
+                        <input type="text" class="form-control" id="room_type" name="room_type" 
+                            value="<?php echo htmlspecialchars($currentRoomType); ?>" readonly>
                     </div>
+
                     <div class="form-group">
-                        <label for="max_occupancy">Max Occupancy</label>
-                        <input type="number" id="max_occupancy" name="max_occupancy" min="1"
-                            value="<?php echo isset($_POST['max_occupancy']) ? htmlspecialchars($_POST['max_occupancy']) : ($currentRoomType == 'Single' ? '1' : ($currentRoomType == 'Double' ? '2' : '4')); ?>">
+                        <label for="price_per_month">Price Per Month</label>
+                        <input type="number" class="form-control" id="price_per_month" name="price_per_month" 
+                            value="<?php echo isset($_POST['price_per_month']) ? htmlspecialchars($_POST['price_per_month']) : ''; ?>" required step="0.01">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Amenities</label>
-                        <div class="checkbox-group">
-                            <label>
-                                <input type="checkbox" name="has_private_bathroom"
-                                    <?php echo isset($_POST['has_private_bathroom']) ? 'checked' : ''; ?>>
-                                Private Bathroom
-                            </label>
-                            <label>
-                                <input type="checkbox" name="has_air_conditioning"
-                                    <?php echo isset($_POST['has_air_conditioning']) ? 'checked' : ''; ?>>
-                                Air Conditioning
-                            </label>
-                        </div>
+                        <label for="availability_status">Availability Status</label>
+                        <select class="form-control" id="availability_status" name="availability_status" required>
+                            <option value="Available" selected>Available</option>
+                            <option value="Booked">Booked</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max_occupancy">Maximum Occupancy</label>
+                        <input type="number" class="form-control" id="max_occupancy" name="max_occupancy" 
+                            value="<?php echo isset($_POST['max_occupancy']) ? htmlspecialchars($_POST['max_occupancy']) : ($currentRoomType == 'Single' ? '1' : ($currentRoomType == 'Double' ? '2' : '4')); ?>" 
+                            required min="1">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="window_view">Window View</label>
-                        <select id="window_view" name="window_view">
-                            <option value="">Select View</option>
+                        <select class="form-control" id="window_view" name="window_view">
                             <option value="Street" <?php echo (isset($_POST['window_view']) && $_POST['window_view'] == 'Street') ? 'selected' : ''; ?>>Street</option>
                             <option value="Garden" <?php echo (isset($_POST['window_view']) && $_POST['window_view'] == 'Garden') ? 'selected' : ''; ?>>Garden</option>
                             <option value="Courtyard" <?php echo (isset($_POST['window_view']) && $_POST['window_view'] == 'Courtyard') ? 'selected' : ''; ?>>Courtyard</option>
                             <option value="No View" <?php echo (isset($_POST['window_view']) && $_POST['window_view'] == 'No View') ? 'selected' : ''; ?>>No View</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="square_footage">Square Footage</label>
-                        <input type="number" step="0.01" id="square_footage" name="square_footage"
-                            value="<?php echo isset($_POST['square_footage']) ? htmlspecialchars($_POST['square_footage']) : ''; ?>">
-                    </div>
-                </div>
 
-                <div class="form-row">
                     <div class="form-group">
                         <label for="furnishing_status">Furnishing Status</label>
-                        <select id="furnishing_status" name="furnishing_status">
-                            <option value="">Select Status</option>
+                        <select class="form-control" id="furnishing_status" name="furnishing_status">
                             <option value="Fully Furnished" <?php echo (isset($_POST['furnishing_status']) && $_POST['furnishing_status'] == 'Fully Furnished') ? 'selected' : ''; ?>>Fully Furnished</option>
                             <option value="Partially Furnished" <?php echo (isset($_POST['furnishing_status']) && $_POST['furnishing_status'] == 'Partially Furnished') ? 'selected' : ''; ?>>Partially Furnished</option>
                             <option value="Unfurnished" <?php echo (isset($_POST['furnishing_status']) && $_POST['furnishing_status'] == 'Unfurnished') ? 'selected' : ''; ?>>Unfurnished</option>
@@ -224,10 +216,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
                 <div class="form-row">
+                    <div class="form-group">
+                        <label>Amenities</label>
+                        <div style="margin-top: 10px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" name="has_private_bathroom" style="width: auto; margin-right: 8px;"
+                                    <?php echo isset($_POST['has_private_bathroom']) ? 'checked' : ''; ?>>
+                                <span>Private Bathroom</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" name="has_air_conditioning" style="width: auto; margin-right: 8px;"
+                                    <?php echo isset($_POST['has_air_conditioning']) ? 'checked' : ''; ?>>
+                                <span>Air Conditioning</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="square_footage">Square Footage</label>
+                        <input type="number" class="form-control" id="square_footage" name="square_footage" 
+                            value="<?php echo isset($_POST['square_footage']) ? htmlspecialchars($_POST['square_footage']) : ''; ?>" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group full-width">
                         <label for="additional_amenities">Additional Amenities</label>
-                        <textarea id="additional_amenities" name="additional_amenities" rows="3"><?php echo isset($_POST['additional_amenities']) ? htmlspecialchars($_POST['additional_amenities']) : '';
-                                                                                                    ?></textarea>
+                        <textarea class="form-control" id="additional_amenities" name="additional_amenities" 
+                                rows="3"><?php echo isset($_POST['additional_amenities']) ? htmlspecialchars($_POST['additional_amenities']) : ''; ?></textarea>
                     </div>
                 </div>
 
@@ -235,7 +251,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i>
                         <?php
-                        // Change button text based on remaining rooms
                         $remainingRooms = array_sum($roomQuantities);
                         echo ($remainingRooms > 1) ? "Save and Add Next Room" : "Finish Room Addition";
                         ?>

@@ -176,6 +176,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
                 <a href="view_hostels.php" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
             </div>
             <div class="manage-hostel-content">
+                <?php
+                    // Display success message if set
+                    if (isset($_SESSION['success'])) {
+                        echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['success']) . '</div>';
+                        unset($_SESSION['success']);
+                    }
+                    
+                    // Display error message if set
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['error']) . '</div>';
+                        unset($_SESSION['error']); 
+                    }
+                    ?>
                 <div class="hostel-header">
                     <h1><?php echo htmlspecialchars($hostel['Name']); ?> </h1>
                     <div class="action-buttons">

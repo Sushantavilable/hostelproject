@@ -229,24 +229,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-row">
                     <div class="form-group">
                         <label>Amenities</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="has_private_bathroom" 
-                                       <?php echo $has_private_bathroom ? 'checked' : ''; ?>>
-                                Private Bathroom
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="has_air_conditioning" 
-                                       <?php echo $has_air_conditioning ? 'checked' : ''; ?>>
-                                Air Conditioning
-                            </label>
+                        <div  style="margin-top: 10px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" name="has_private_bathroom" style="width: auto; margin-right: 8px;"
+                                    <?php echo $has_private_bathroom ? 'checked' : ''; ?>>
+                                <span>Private Bathroom</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" name="has_air_conditioning" style="width: auto; margin-right: 8px;"
+                                    <?php echo $has_air_conditioning ? 'checked' : ''; ?>>
+                                <span>Air Conditioning</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="square_footage">Square Footage</label>
                         <input type="number" class="form-control" id="square_footage" name="square_footage" 
-                               value="<?php echo htmlspecialchars($square_footage); ?>" step="0.01">
+                            value="<?php echo htmlspecialchars($square_footage); ?>" step="0.01">
                     </div>
                 </div>
 
