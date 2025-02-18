@@ -62,21 +62,43 @@ $roomCountResult = $totalRoomsStmt->get_result()->fetch_assoc();
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     $roomId = intval($_GET['roomId']);
 
-    // Delete the room
-    $deleteQuery = "DELETE FROM rooms WHERE RoomID = ? AND HostelID = ?";
-    $stmt = $conn->prepare($deleteQuery);
-    $stmt->bind_param("ii", $roomId, $HostelID);
+    // First check if the room is booked
+    $checkBookingQuery = "SELECT r.AvailabilityStatus, 
+                                COUNT(b.BookingID) as active_bookings 
+                         FROM rooms r 
+                         LEFT JOIN bookings b ON r.RoomID = b.RoomID 
+                         WHERE r.RoomID = ? AND r.HostelID = ? 
+                         AND (b.BookingStatus = 'Pending' OR b.BookingStatus = 'Confirmed')
+                         GROUP BY r.RoomID, r.AvailabilityStatus";
+    
+    $checkStmt = $conn->prepare($checkBookingQuery);
+    $checkStmt->bind_param("ii", $roomId, $HostelID);
+    $checkStmt->execute();
+    $result = $checkStmt->get_result();
+    $roomStatus = $result->fetch_assoc();
 
-    if ($stmt->execute()) {
-        $_SESSION['success'] = "Room deleted successfully";
+    if ($roomStatus && ($roomStatus['AvailabilityStatus'] == 'Booked' || $roomStatus['active_bookings'] > 0)) {
+        $_SESSION['error'] = "Cannot delete room as it is currently booked or has pending bookings.";
     } else {
-        $_SESSION['error'] = "Failed to delete room";
+        // Delete the room only if it's not booked
+        $deleteQuery = "DELETE FROM rooms WHERE RoomID = ? AND HostelID = ?";
+        $stmt = $conn->prepare($deleteQuery);
+        $stmt->bind_param("ii", $roomId, $HostelID);
+
+        if ($stmt->execute()) {
+            $_SESSION['success'] = "Room deleted successfully";
+        } else {
+            $_SESSION['error'] = "Failed to delete room";
+        }
+        $stmt->close();
     }
+    $checkStmt->close();
 
     // Redirect back to the same page
     header("Location: manage_hostels.php?id=" . $HostelID);
     exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

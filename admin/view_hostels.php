@@ -10,25 +10,6 @@ if (!isset($_SESSION['admin_id'])) {
 // Include database connection
 require_once('../includes/db_connection.php');
 
-// Handle delete hostel action
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
-    $hostelId = intval($_GET['id']);
-    $deleteQuery = "DELETE FROM hostels WHERE HostelID = ?";
-
-    $stmt = $conn->prepare($deleteQuery);
-    $stmt->bind_param("i", $hostelId);
-
-    if ($stmt->execute()) {
-        $_SESSION['message'] = "Hostel deleted successfully.";
-    } else {
-        $_SESSION['error'] = "Error deleting hostel: " . $conn->error;
-    }
-
-    $stmt->close();
-    header("Location: view_hostels.php");
-    exit;
-}
-
 // Fetch hostels
 $query = "SELECT * FROM hostels ORDER BY CreatedAt DESC";
 $result = $conn->query($query);
@@ -95,7 +76,7 @@ $result = $conn->query($query);
                                     <a href='manage_hostels.php?id=" . $row['HostelID'] . "' class='btn btn-primary'style='background-color: blue;'>
                                          <i class='fa-solid fa-bars-progress'></i> Manage
                                     </a>
-                                    <a href='view_hostels.php?action=delete&id=".$row['HostelID']."' class='btn btn-secondary' style='background-color: #dc3545;' onclick='return confirm(\"Are you sure you want to delete this hostel?\");'>
+                                    <a href='delete_hostel.php?action=delete&id=" . $row['HostelID'] . "' class='btn btn-secondary' style='background-color: #dc3545;' onclick='return confirm(\"Are you sure you want to delete this hostel?\");'>
                                         <i class='fas fa-trash'></i> Delete
                                     </a>
                                 </td>";
