@@ -33,6 +33,15 @@ $result = mysqli_query($conn, $query);
         <div class="main">
             <?php include 'navbar.php'; ?>
             <h2>Users</h2>
+            <?php if (isset($_SESSION['message'])): ?>
+                <div class="alert alert-<?php echo $_SESSION['message_type']; ?>">
+                    <?php 
+                        echo $_SESSION['message']; 
+                        unset($_SESSION['message']);
+                        unset($_SESSION['message_type']);
+                    ?>
+                </div>
+            <?php endif; ?>
             <div style="overflow-x:auto;">
                 <table id="posts">
                     <thead>
