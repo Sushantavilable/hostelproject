@@ -38,7 +38,17 @@ if (isset($_GET['action']) && isset($_GET['booking_id'])) {
     }
 }
 
-// Fetch all booking details with user and hostel names
+// Get admin role and assigned hostel
+$admin_id = $_SESSION['admin_id'];
+$admin_query = "SELECT Role, AssignedHostelID FROM admins WHERE AdminID = ?";
+$admin_stmt = $conn->prepare($admin_query);
+$admin_stmt->bind_param("i", $admin_id);
+$admin_stmt->execute();
+$admin_result = $admin_stmt->get_result();
+$admin_data = $admin_result->fetch_assoc();
+
+// Fetch booking details with user and hostel names
+// If hostel_admin, only show bookings for their assigned hostel
 $sql = "SELECT 
             b.BookingID, 
             u.FullName AS UserName, 
@@ -52,9 +62,20 @@ $sql = "SELECT
         FROM bookings b
         JOIN users u ON b.UserID = u.UserID
         JOIN rooms r ON b.RoomID = r.RoomID
-        JOIN hostels h ON r.HostelID = h.HostelID
-        ORDER BY b.CreatedAt DESC";
-$result = $conn->query($sql);
+        JOIN hostels h ON r.HostelID = h.HostelID ";
+
+if ($admin_data['Role'] == 'hostel_admin' && $admin_data['AssignedHostelID'] !== null) {
+    $sql .= "WHERE b.HostelID = ? ";
+    $sql .= "ORDER BY b.CreatedAt DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $admin_data['AssignedHostelID']);
+} else {
+    $sql .= "ORDER BY b.CreatedAt DESC";
+    $stmt = $conn->prepare($sql);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Check for SQL errors
 if (!$result) {

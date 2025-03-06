@@ -12,11 +12,29 @@ require_once('../includes/db_connection.php');
 
 // Get the HostelID from the URL
 if (!isset($_GET['id'])) {
-    echo "Error: Hostel ID is missing.";
+    $_SESSION['error'] = "Error: Hostel ID is missing.";
+    header("Location: view_hostels.php");
     exit;
 }
 
 $HostelID = intval($_GET['id']);
+
+// Check admin access permissions
+$admin_id = $_SESSION['admin_id'];
+$role_query = "SELECT Role, AssignedHostelID FROM admins WHERE AdminID = ?";
+$stmt = $conn->prepare($role_query);
+$stmt->bind_param("i", $admin_id);
+$stmt->execute();
+$role_result = $stmt->get_result();
+$admin_data = $role_result->fetch_assoc();
+$stmt->close();
+
+// If hostel admin, check they can only access their assigned hostel
+if ($admin_data['Role'] === 'hostel_admin' && $admin_data['AssignedHostelID'] != $HostelID) {
+    $_SESSION['error'] = "You do not have permission to manage this hostel.";
+    header("Location: view_hostels.php");
+    exit;
+}
 
 // Fetch the specific hostel's details from the database
 $query = "SELECT * FROM hostels WHERE HostelID = ?";
@@ -26,7 +44,8 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "Error: Hostel not found.";
+    $_SESSION['error'] = "Error: Hostel not found.";
+    header("Location: view_hostels.php");
     exit;
 }
 
@@ -34,20 +53,20 @@ if ($result->num_rows == 0) {
 $hostel = $result->fetch_assoc();
 
 // Fetch rooms for this hostel
-$roomQuery = "SELECT * FROM rooms WHERE HostelID = ?";
+$roomQuery = "SELECT * FROM rooms WHERE HostelID = ? ORDER BY RoomNumber";
 $roomStmt = $conn->prepare($roomQuery);
 $roomStmt->bind_param("i", $HostelID);
 $roomStmt->execute();
 $roomResult = $roomStmt->get_result();
 
 // Fetch images for the hostel
-$imageQuery = "SELECT * FROM hostel_images WHERE HostelID = ?";
+$imageQuery = "SELECT * FROM hostel_images WHERE HostelID = ? ORDER BY IsPrimaryImage DESC";
 $imageStmt = $conn->prepare($imageQuery);
 $imageStmt->bind_param("i", $HostelID);
 $imageStmt->execute();
 $imageResult = $imageStmt->get_result();
 
-// Fetch total and available rooms
+// Fetch total and available rooms (like in the second file)
 $totalRoomsQuery = "SELECT 
     COUNT(*) as TotalRooms, 
     SUM(CASE WHEN AvailabilityStatus = 'Available' THEN 1 ELSE 0 END) as AvailableRooms 
@@ -58,18 +77,18 @@ $totalRoomsStmt->bind_param("i", $HostelID);
 $totalRoomsStmt->execute();
 $roomCountResult = $totalRoomsStmt->get_result()->fetch_assoc();
 
-// Handle Delete Operation
+// Handle Delete Room Operation
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     $roomId = intval($_GET['roomId']);
 
     // First check if the room is booked
     $checkBookingQuery = "SELECT r.AvailabilityStatus, 
-                                COUNT(b.BookingID) as active_bookings 
-                         FROM rooms r 
-                         LEFT JOIN bookings b ON r.RoomID = b.RoomID 
-                         WHERE r.RoomID = ? AND r.HostelID = ? 
-                         AND (b.BookingStatus = 'Pending' OR b.BookingStatus = 'Confirmed')
-                         GROUP BY r.RoomID, r.AvailabilityStatus";
+                             COUNT(b.BookingID) as active_bookings 
+                      FROM rooms r 
+                      LEFT JOIN bookings b ON r.RoomID = b.RoomID 
+                      WHERE r.RoomID = ? AND r.HostelID = ? 
+                      AND (b.BookingStatus = 'Pending' OR b.BookingStatus = 'Confirmed')
+                      GROUP BY r.RoomID, r.AvailabilityStatus";
     
     $checkStmt = $conn->prepare($checkBookingQuery);
     $checkStmt->bind_param("ii", $roomId, $HostelID);
@@ -98,7 +117,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     header("Location: manage_hostels.php?id=" . $HostelID);
     exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -210,7 +228,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
                         echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['error']) . '</div>';
                         unset($_SESSION['error']); 
                     }
-                    ?>
+                ?>
                 <div class="hostel-header">
                     <h1><?php echo htmlspecialchars($hostel['Name']); ?> </h1>
                     <div class="action-buttons">

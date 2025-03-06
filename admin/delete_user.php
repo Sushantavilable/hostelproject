@@ -33,7 +33,24 @@ if ($result->num_rows === 0) {
     exit;
 }
 
-// Delete the user
+// Check if the user has any active bookings (Pending or Confirmed)
+$booking_check_query = "SELECT COUNT(*) as booking_count FROM bookings 
+                        WHERE UserID = ? AND BookingStatus IN ('Pending', 'Confirmed')";
+$booking_stmt = $conn->prepare($booking_check_query);
+$booking_stmt->bind_param("i", $user_id);
+$booking_stmt->execute();
+$booking_result = $booking_stmt->get_result();
+$booking_data = $booking_result->fetch_assoc();
+
+// If user has active bookings, prevent deletion
+if ($booking_data['booking_count'] > 0) {
+    $_SESSION['message'] = "Cannot delete user with active bookings. Please cancel or complete their bookings first.";
+    $_SESSION['message_type'] = 'warning';
+    header("Location: users.php");
+    exit;
+}
+
+// Delete the user if no active bookings
 $delete_query = "DELETE FROM users WHERE UserID = ?";
 $delete_stmt = $conn->prepare($delete_query);
 $delete_stmt->bind_param("i", $user_id);
@@ -49,6 +66,7 @@ if ($delete_stmt->execute()) {
 
 // Close statements
 $stmt->close();
+$booking_stmt->close();
 $delete_stmt->close();
 $conn->close();
 
