@@ -13,7 +13,7 @@
     </head>
 
     <body>
-        <?php include 'header.php'; ?>
+        <?php include 'header.php'; include('../includes/db_connection.php'); ?>
 
         <section class="home">
             <div class="content">
