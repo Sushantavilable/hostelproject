@@ -34,13 +34,20 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     } elseif ($roomResult['room_count'] > 0) {
         $_SESSION['error'] = "Cannot delete hostel - it has " . $roomResult['room_count'] . " booked room(s)";
     } else {
-        // Safe to delete
+        // First, find and delete the hostel admin
+        $adminQuery = "DELETE FROM admins WHERE AssignedHostelID = ? AND Role = 'hostel_admin'";
+        $adminStmt = $conn->prepare($adminQuery);
+        $adminStmt->bind_param("i", $hostelId);
+        $adminStmt->execute();
+        $adminStmt->close();
+        
+        // Then delete the hostel
         $deleteQuery = "DELETE FROM hostels WHERE HostelID = ?";
         $deleteStmt = $conn->prepare($deleteQuery);
         $deleteStmt->bind_param("i", $hostelId);
         
         if ($deleteStmt->execute()) {
-            $_SESSION['message'] = "Hostel deleted successfully.";
+            $_SESSION['message'] = "Hostel and associated admin deleted successfully.";
         } else {
             $_SESSION['error'] = "Error deleting hostel: " . $conn->error;
         }
