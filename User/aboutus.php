@@ -19,8 +19,10 @@
                     <h1>WELCOME</h1>
                     <h2>Hostel Finders</h2>
                 </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Welcome to Hostel Finders, your home away from home in kathmandu valley! Whether you're a solo traveler, a backpacker, or a group of friends, we offer affordable, comfortable, and social accommodation in the heart of kathmandu.
+                Our mission is to create a welcoming space where travelers from all over the world can connect, share experiences, and enjoy a unique and authentic stay in kathmandu.Founded in 2020, Hostel Finders started as a small, family-run business. Over the years, it has grown into a vibrant hostel with a strong focus on community-building and offering local experiences.
+                We offer cozy dorms and private rooms, each equipped with comfy beds, lockers, and air conditioning. Enjoy free Wi-Fi, a complimentary breakfast every morning, and access to our vibrant common room.
+                Ready for an unforgettable experience? Book your stay today and become part of the  family.</p>
                 <button class="about-btn">Find Hostels</button>
             </div>
             <div class="right">
